@@ -40,9 +40,8 @@ def enviar_arquivo(sock, caminho_arquivo):
 def main():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((HOST, PORT))
-    
-    # Envia autenticação: "AUTH user pass"
-    send_line(client_socket, "AUTH user 123")
+    print(f"Aguardando autenticação com o HOST {HOST}, porta {PORT}")
+
     resposta = read_line(client_socket)
     if resposta != "AUTH_OK":
         print("Autenticação falhou. Resposta do servidor:", resposta)

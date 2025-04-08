@@ -5,9 +5,6 @@ import threading
 HOST = ''      # Escuta em todas as interfaces
 PORT = 8181
 
-# Dados de autenticação
-VALID_USER = "user"
-VALID_PASS = "123"
 
 def read_line(conn):
     """Lê da conexão até encontrar '\n' e retorna a linha (sem o terminador)."""
@@ -20,18 +17,14 @@ def read_line(conn):
     return line.decode().strip()
 
 def handle_client(conn, addr):
-    print("Conexão estabelecida com:", addr)
-    
-    # Autenticação (o formato esperado: "AUTH usuario senha")
-    auth_line = read_line(conn)
-    _, usuario, senha = auth_line.split()
-    if usuario != VALID_USER or senha != VALID_PASS:
+    if (str(input(f"Conexão estabelecida com: {addr} aceita conexão? [S/N]: "))).upper() == "S":
+        print("aqui")
+        conn.sendall("AUTH_OK\n".encode())
+    else:
         conn.sendall("ERRO: autenticação falhou.\n".encode())
         conn.close()
         return
-    else:
-        conn.sendall("AUTH_OK\n".encode())
-    
+
     while True:
         header = read_line(conn)
         if header.upper() == "QUIT":
